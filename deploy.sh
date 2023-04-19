@@ -41,14 +41,18 @@ git log  -3  --pretty=format:'%s' --abbrev-commit   | awk   -F ':'   '{print   N
 # 输出这次的更新内容
 cat $LOG_FILE_PATH
 
-# 移除上一个版本
-rm -rf pre
+if [ -d "./pre" ]; then    
+    # 移除上一个版本
+    rm -rf pre
+fi
 
 # 将当前运行版本的文件夹 复制一份到到备份文件夹
 cp -r current pre
 
-#移除当前版本的文件夹
-rm -rf current
+if [ -d "./current" ]; then    
+    #移除当前版本的文件夹
+    rm -rf current
+fi
 # 将新版本的文件放到current
 cp -r dist current
 # 将当前版本的文件夹 复制到nginx目录
