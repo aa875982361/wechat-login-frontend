@@ -38,7 +38,7 @@ onMounted(() => {
     const { code_url } = res.data?.data || {}
     nextTick(() => {
       console.log("qrCodeNode", qrCodeNode.value, code_url)
-      QRCode.toCanvas(qrCodeNode.value, code_url, { width, height });
+      QRCode.toCanvas(qrCodeNode.value, code_url, { width });
     })
   })
 })
