@@ -2,7 +2,6 @@
 import axios from "axios"
 import { nextTick, onMounted, ref } from "vue";
 import QRCode from 'qrcode';
-declare const WeixinJSBridge: any;
 
 const isInWx = ref(false)
 // 支付费用
