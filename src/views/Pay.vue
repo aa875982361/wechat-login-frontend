@@ -11,6 +11,7 @@ const width = 200; // 二维码的宽度
 const height = 200; // 二维码的高度
 
 const qrCodeNode = ref();
+const isPaySuccess = ref(false)
 
 // 初始化
 onMounted(() => {
@@ -74,6 +75,7 @@ function handleClickPay() {
       function(res: any){
         console.log(" WeixinJSBridge.invoke", res);
         if(res.err_msg == "get_brand_wcpay_request:ok" ){
+          isPaySuccess.value = true
         // 使用以上方式判断前端返回,微信团队郑重提示：
               //res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
         } 
@@ -95,7 +97,9 @@ function isWXBrowser() {
     <div>
         <div v-if="isInWx">
           <!-- 微信内 -->
-          <button @click="handleClickPay">支付</button>
+          <button v-if="!isPaySuccess" @click="handleClickPay">支付</button>
+          <div v-else>恭喜支付成功</div>
+
         </div>
         <div v-else>
           <!-- pc浏览器内 -->
