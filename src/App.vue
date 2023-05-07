@@ -1,11 +1,13 @@
 <script setup lang="ts">
 // import { RouterLink, RouterView } from 'vue-router'
 import Login from './views/Login.vue';
+import Pay from "./views/Pay.vue"
 </script>
 
 <template>
   <!-- <RouterView /> -->
-  <Login></Login>
+  <!-- <Login></Login> -->
+  <Pay></Pay>
 </template>
 
 <style scoped>
