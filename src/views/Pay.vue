@@ -12,6 +12,7 @@ const height = 200; // 二维码的高度
 
 const qrCodeNode = ref();
 const isPaySuccess = ref(false)
+const payStatus = ref("")
 
 // 初始化
 onMounted(() => {
@@ -29,16 +30,33 @@ onMounted(() => {
     method: "POST",
     data: {
       "openid":"oPuYn6s3yuFnvmk74ZhYajZyrVCY",
-      "totalFee": 1,
-      "attach": "optional",
+      "productId": 1,
       "isPc": true
     }
   }).then((res: any) => {
     console.log("res", res);
-    const { code_url } = res.data?.data || {}
+    const { payInfo = {}, orderId } = res.data
+    const { code_url } = payInfo
     nextTick(() => {
       console.log("qrCodeNode", qrCodeNode.value, code_url)
       QRCode.toCanvas(qrCodeNode.value, code_url, { width });
+      payStatus.value = "等待支付"
+      // 轮训接口
+      const timer = setInterval(() => {
+        axios.request({
+          url: "https://www.nisonfuture.cn/api/pay/check",
+          method: "POST",
+          data: {
+            orderId
+          }
+        }).then(res => {
+          // 如果订单状态为2 则支付成功 
+          if(res.data?.orderInfo.status == 2){
+            payStatus.value = "支付成功"
+            clearInterval(timer)
+          }
+        })
+      }, 2000)
     })
   })
 })
@@ -105,6 +123,7 @@ function isWXBrowser() {
           <!-- pc浏览器内 -->
           <canvas ref="qrCodeNode" :width="width" :height="height" />
           <div>请扫码支付</div>
+          <div v-if="payStatus">支付状态：{{payStatus}}</div>
         </div>
     </div>
 </template>
